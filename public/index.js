@@ -165,18 +165,19 @@ var rentalModifications = [{
   'pickupDate': '2015-12-05'
 }];
 
+//Exercice1
 function modifPrices(cars, rentals){
 	
 	for(var i = 0; i < cars.length; i++){
 		for(var j = 0; j < rentals.length; j++){
-			if(cars[i].id == rentals[i].carId){
+			if(cars[i].id == rentals[j].carId){
 				
-				var date1 = new Date(rentals[i].returnDate);
-				var date2 = new Date(rentals[i].pickupDate);
+				var date1 = new Date(rentals[j].returnDate);
+				var date2 = new Date(rentals[j].pickupDate);
 				var returnDate = date1.getDate();
 				var pickupDate = date2.getDate()-1;
 				
-				rentals[i].price = (returnDate - pickupDate)*cars[i].pricePerDay + rentals[i].distance*cars[i].pricePerKm;
+				rentals[j].price = (returnDate - pickupDate)*cars[i].pricePerDay + rentals[j].distance*cars[i].pricePerKm;
 			}
 		}
 	}

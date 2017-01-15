@@ -206,7 +206,6 @@ function modifPrices(cars, rentals){
 
 //Exercice 3
 function getCommission(rentals){
-	modifPrices(cars, rentals);
 	
 	var i;
 	var commission;
@@ -240,7 +239,6 @@ function deductibleReductionChargeIncome(rentals, numberOfRentalDays, index){
 }
 
 function modifPricesWithDeductibleReductionCharge(rentals){
-	modifPrices(cars, rentals);
 	
 	var i;
 	for(i = 0; i < rentals.length; i++){
@@ -253,7 +251,6 @@ function modifPricesWithDeductibleReductionCharge(rentals){
 }
 
 function getCommissionWithDeductibleReductionCharge(rentals){
-	modifPricesWithDeductibleReductionCharge(rentals);
 	
 	var i;
 	var commissionWithDeductibleReductionCharge;
@@ -271,11 +268,58 @@ function getCommissionWithDeductibleReductionCharge(rentals){
 	
 }
 
+//Exercice 5
+function totalCommission(rentals, index){
+	var i;
+	var commission;
+	
+	commission = rentals[index].commission.insurance + rentals[index].commission.assistance + rentals[index].commission.drivy;
+	
+	return commission;
+}
+
+function payment(rentals, actors){
+	var i;
+	var j;
+	var k;
+	
+	for(i = 0; i < rentals.length; i++){
+		var commission = totalCommission(rentals, i);
+		var numberOfRentalDays = rentalDays(rentals, i);
+		var deductibleIncome = deductibleReductionChargeIncome(rentals, numberOfRentalDays, i);
+
+		for(j = 0; j < actors.length; j++){
+			if(rentals[i].id == actors[j].rentalId){
+				for(k = 0; k < actors[j].payment.length; k++){
+					if(actors[j].payment[k].who == "driver"){
+						actors[j].payment[k].amount = rentals[i].price;
+					}
+					else if(actors[j].payment[k].who == "owner"){
+						actors[j].payment[k].amount = rentals[i].price - (commission + deductibleIncome);
+					}
+					else if(actors[j].payment[k].who == "insurance"){
+						actors[j].payment[k].amount = rentals[i].commission.insurance;
+					}
+					else if(actors[j].payment[k].who == "assistance"){
+						actors[j].payment[k].amount = rentals[i].commission.assistance;
+					}
+					else{
+						actors[j].payment[k].amount = rentals[i].commission.drivy + deductibleIncome;
+					}
+				}
+			}
+		}
+	}
+}
+
 //main
 function main(){
+	
+	modifPrices(cars, rentals);
 	getCommission(rentals); //compute commission without deductibleReductionCharge
 	modifPricesWithDeductibleReductionCharge(rentals);
 	//getCommissionWithDeductibleReductionCharge(rentals);
+	payment(rentals, actors);
 	
 }
 

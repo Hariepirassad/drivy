@@ -166,17 +166,25 @@ var rentalModifications = [{
 }];
 
 //Exercice1 & 2
-function modifPrices(cars, rentals){
+function rentalDays(rentals, index){
+	var rentalDays;
 	
-	for(var i = 0; i < cars.length; i++){
-		for(var j = 0; j < rentals.length; j++){
+	var date1 = new Date(rentals[index].returnDate);
+	var date2 = new Date(rentals[index].pickupDate);
+	var returnDate = date1.getDate();
+	var pickupDate = date2.getDate()-1;
+	
+	return rentalDays = returnDate - pickupDate;
+}
+
+function modifPrices(cars, rentals){
+	var i;
+	var j;
+	for(i = 0; i < cars.length; i++){
+		for(j = 0; j < rentals.length; j++){
 			if(cars[i].id == rentals[j].carId){
 				
-				var date1 = new Date(rentals[j].returnDate);
-				var date2 = new Date(rentals[j].pickupDate);
-				var returnDate = date1.getDate();
-				var pickupDate = date2.getDate()-1;
-				var numberOfRentalDays = returnDate - pickupDate;
+				var numberOfRentalDays = rentalDays(rentals, j);
 			
 				if(numberOfRentalDays > 1 && numberOfRentalDays <= 4){
 					rentals[j].price = numberOfRentalDays*(cars[i].pricePerDay*0.9) + rentals[j].distance*cars[i].pricePerKm;
@@ -196,7 +204,26 @@ function modifPrices(cars, rentals){
 	
 }
 
-modifPrices(cars, rentals);
+//Exercice 3
+function getCommission(rentals){
+	modifPrices(cars, rentals);
+	
+	var i;
+	var commission;
+	for(i = 0; i < rentals.length; i++){
+		
+		var numberOfRentalDays = rentalDays(rentals, i);
+		
+		commission = rentals[i].price*0.3;
+		rentals[i].commission.insurance = commission*0.5;
+		rentals[i].commission.assistance = numberOfRentalDays;
+		rentals[i].commission.drivy = commission - (rentals[i].commission.insurance + rentals[i].commission.assistance);
+		
+	}
+	
+}
+
+getCommission(rentals);
 
 console.log(cars);
 console.log(rentals);

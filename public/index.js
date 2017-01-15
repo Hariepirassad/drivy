@@ -165,7 +165,7 @@ var rentalModifications = [{
   'pickupDate': '2015-12-05'
 }];
 
-//Exercice1
+//Exercice1 & 2
 function modifPrices(cars, rentals){
 	
 	for(var i = 0; i < cars.length; i++){
@@ -176,11 +176,24 @@ function modifPrices(cars, rentals){
 				var date2 = new Date(rentals[j].pickupDate);
 				var returnDate = date1.getDate();
 				var pickupDate = date2.getDate()-1;
-				
-				rentals[j].price = (returnDate - pickupDate)*cars[i].pricePerDay + rentals[j].distance*cars[i].pricePerKm;
+				var numberOfRentalDays = returnDate - pickupDate;
+			
+				if(numberOfRentalDays > 1 && numberOfRentalDays <= 4){
+					rentals[j].price = numberOfRentalDays*(cars[i].pricePerDay*0.9) + rentals[j].distance*cars[i].pricePerKm;
+				}
+				else if(numberOfRentalDays > 4 && numberOfRentalDays <= 10){
+					rentals[j].price = numberOfRentalDays*(cars[i].pricePerDay*0.7) + rentals[j].distance*cars[i].pricePerKm;
+				}
+				else if(numberOfRentalDays > 10){
+					rentals[j].price = numberOfRentalDays*(cars[i].pricePerDay*0.5) + rentals[j].distance*cars[i].pricePerKm;
+				}
+				else{
+					rentals[j].price = numberOfRentalDays*cars[i].pricePerDay + rentals[j].distance*cars[i].pricePerKm;
+				}
 			}
 		}
 	}
+	
 }
 
 modifPrices(cars, rentals);

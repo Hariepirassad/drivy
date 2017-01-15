@@ -223,7 +223,63 @@ function getCommission(rentals){
 	
 }
 
-getCommission(rentals);
+//Exercice 4
+function deductibleReductionChargeIncome(rentals, numberOfRentalDays, index){
+	var deductibleReductionIncome;
+		
+		if(rentals[index].options.deductibleReduction == true){
+			
+			deductibleReductionIncome = 4*numberOfRentalDays;
+		}
+		else{
+			
+			deductibleReductionIncome = 0;
+		}
+	
+	return deductibleReductionIncome;
+}
+
+function modifPricesWithDeductibleReductionCharge(rentals){
+	modifPrices(cars, rentals);
+	
+	var i;
+	for(i = 0; i < rentals.length; i++){
+		
+		var numberOfRentalDays = rentalDays(rentals, i);
+		var deductibleIncome = deductibleReductionChargeIncome(rentals, numberOfRentalDays, i);
+
+		rentals[i].price += deductibleIncome;
+	}
+}
+
+function getCommissionWithDeductibleReductionCharge(rentals){
+	modifPricesWithDeductibleReductionCharge(rentals);
+	
+	var i;
+	var commissionWithDeductibleReductionCharge;
+	for(i = 0; i < rentals.length; i++){
+		
+		var numberOfRentalDays = rentalDays(rentals, i);
+		var deductibleIncome = deductibleReductionChargeIncome(rentals, numberOfRentalDays, i);
+
+		commissionWithDeductibleReductionCharge = rentals[i].price*0.3;
+		rentals[i].commission.insurance = commissionWithDeductibleReductionCharge*0.5;
+		rentals[i].commission.assistance = numberOfRentalDays;
+		rentals[i].commission.drivy = commissionWithDeductibleReductionCharge - (rentals[i].commission.insurance + rentals[i].commission.assistance) + deductibleIncome;
+		
+	}
+	
+}
+
+//main
+function main(){
+	getCommission(rentals); //compute commission without deductibleReductionCharge
+	modifPricesWithDeductibleReductionCharge(rentals);
+	//getCommissionWithDeductibleReductionCharge(rentals);
+	
+}
+
+main();
 
 console.log(cars);
 console.log(rentals);
